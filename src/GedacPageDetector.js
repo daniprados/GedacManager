@@ -17,7 +17,7 @@ export class GedacPageDetector {
             this.#normalizeText(heading.textContent) === GedacPageDetector.TARGET_TITLE
         ));
 
-        this.logger.debug('Comprovació de la pàgina de matrícula CFP', { isTarget });
+        this.logger.debug('Comprovació de la pàgina de matrícula (CFP)', { isTarget });
 
         return isTarget;
     }

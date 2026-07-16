@@ -31,7 +31,7 @@ describe('GedacPageDetector', () => {
 
         expect(detector.isTargetPage(document)).toBe(true);
         expect(logger.debug).toHaveBeenCalledWith(
-            'Comprovació de la pàgina de matrícula CFP',
+            'Comprovació de la pàgina de matrícula (CFP)',
             { isTarget: true },
         );
     });
