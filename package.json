@@ -1,0 +1,22 @@
+{
+  "name": "gedac-manager",
+  "version": "1.15.5",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "build": "node build/sync-version.js && node build/esbuild.config.js"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0"
+  },
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=22"
+  }
+}
