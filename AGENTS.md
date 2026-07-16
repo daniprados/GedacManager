@@ -64,7 +64,19 @@ pnpm run build        # sincronitzar versió + generar dist/script.user.js
 - Per canviar la versió, modifica **només** `build/version.js`.
 - No editis la versió a `package.json` directament — es sobreescriurà al build.
 - No editis el header del userscript a `build/userScriptHeader.raw` per canviar la versió.
-- No canviïs la versió sense que s'hagi demanat explícitament.
+- No canviïs la versió de manera independent, excepte per complir l'increment obligatori previ a un build.
+
+### Guardrail obligatori abans de cada build
+
+**Abans de cada execució de `pnpm run build`, incrementa obligatòriament la versió a `build/version.js`. No executis mai dos builds amb la mateixa versió.**
+
+Utilitza [versionat semàntic](https://semver.org/lang/ca/) amb el format `MAJOR.MINOR.PATCH`:
+
+- `MAJOR`: canvi incompatible amb versions anteriors.
+- `MINOR`: funcionalitat nova compatible amb versions anteriors.
+- `PATCH`: correcció compatible, canvi intern o ajust de documentació que requereixi un nou distribuïble.
+
+La petició d'executar un build autoritza aquest increment obligatori. Si una tasca no necessita generar un nou `dist/script.user.js`, no executis el build només per validar-la; executa `pnpm test`.
 
 
 ## Regles — NO TRENCAR
@@ -123,8 +135,9 @@ No facis servir `npm` ni `yarn`. El `packageManager` està fixat a `package.json
 1. Fes els canvis a `src/`.
 2. Escriu o actualitza tests a `tests/`.
 3. Executa `pnpm test` — han de passar.
-4. Executa `pnpm run build` — ha de generar `dist/script.user.js`.
-5. No pugis canvis a `dist/` sense fer build primer.
+4. Incrementa la versió SemVer exclusivament a `build/version.js`.
+5. Executa `pnpm run build` — ha de sincronitzar la versió i generar `dist/script.user.js`.
+6. No pugis canvis a `dist/` sense fer build primer.
 
 ---
 

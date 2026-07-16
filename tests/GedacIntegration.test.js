@@ -5,6 +5,7 @@ import { GedacController } from '../src/GedacController.js';
 import { GedacPageDetector } from '../src/GedacPageDetector.js';
 import { GedacReportParser } from '../src/GedacReportParser.js';
 import { StudentClassifier } from '../src/StudentClassifier.js';
+import { StudentCsvExporter } from '../src/StudentCsvExporter.js';
 import { StudentListCoordinator } from '../src/StudentListCoordinator.js';
 import { StudentListView } from '../src/StudentListView.js';
 
@@ -32,7 +33,19 @@ describe('Integració de la consulta de matrícula', () => {
                 .mockResolvedValueOnce(`${reportTable([row('PRE-1', 'Alumna primera', 'C', 'S')])}${paginationLink(16)}`)
                 .mockResolvedValueOnce(`${reportTable([row('PRE-2', 'Alumne segon', 'M', '')])}${paginationLink(1)}`),
         };
-        const view = new StudentListView(logger, document, StudentClassifier.CATEGORIES);
+        const csvExporter = new StudentCsvExporter(
+            logger,
+            document,
+            { createObjectURL: jest.fn(), revokeObjectURL: jest.fn() },
+            Blob,
+            () => new Date(2026, 6, 16),
+        );
+        const view = new StudentListView(
+            logger,
+            document,
+            StudentClassifier.CATEGORIES,
+            csvExporter,
+        );
         const coordinator = new StudentListCoordinator(
             logger,
             new GedacReportParser(logger),

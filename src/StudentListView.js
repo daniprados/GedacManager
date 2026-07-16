@@ -1,10 +1,11 @@
 export class StudentListView {
     static ALL_CATEGORY = 'all';
 
-    constructor(logger, document, categories) {
+    constructor(logger, document, categories, csvExporter) {
         this.logger = logger;
         this.document = document;
         this.categories = categories;
+        this.csvExporter = csvExporter;
         this.students = [];
         this.activeCategory = StudentListView.ALL_CATEGORY;
         this.originalReport = null;
@@ -15,6 +16,7 @@ export class StudentListView {
         this.summary = null;
         this.summaryCounts = new Map();
         this.buttons = new Map();
+        this.exportButton = null;
     }
 
     /**
@@ -52,6 +54,7 @@ export class StudentListView {
             this.status.textContent = 'Carregant tots els alumnes de la cerca…';
             this.status.dataset.state = 'loading';
             this.summary?.setAttribute('aria-busy', 'true');
+            this.exportButton.disabled = true;
         }
     }
 
@@ -70,6 +73,7 @@ export class StudentListView {
         this.status.textContent = 'No s’ha pogut carregar el llistat complet. Pots continuar utilitzant la taula original.';
         this.status.dataset.state = 'error';
         this.summary?.setAttribute('aria-busy', 'false');
+        this.exportButton.disabled = true;
         this.#showCategory(StudentListView.ALL_CATEGORY);
     }
 
@@ -88,6 +92,15 @@ export class StudentListView {
             this.buttons.set(definition.category, button);
             controls.append(button);
         }
+
+        this.exportButton = this.document.createElement('button');
+        this.exportButton.type = 'button';
+        this.exportButton.className = 'gedac-student-tools__export';
+        this.exportButton.dataset.action = 'export-csv';
+        this.exportButton.textContent = 'Exporta CSV';
+        this.exportButton.disabled = true;
+        this.exportButton.addEventListener('click', () => this.#exportActiveCategory());
+        controls.append(this.exportButton);
 
         return controls;
     }
@@ -135,6 +148,7 @@ export class StudentListView {
         }
 
         this.resultTable.hidden = showOriginal;
+        this.exportButton.disabled = this.#activeStudents().length === 0;
 
         for (const [buttonCategory, button] of this.buttons) {
             button.setAttribute('aria-pressed', String(buttonCategory === category));
@@ -186,6 +200,20 @@ export class StudentListView {
             const button = this.buttons.get(definition.category);
             button.textContent = `${definition.label} (${count})`;
         }
+    }
+
+    #exportActiveCategory() {
+        const students = this.#activeStudents();
+
+        if (this.csvExporter.download(students, this.activeCategory)) {
+            this.status.textContent = `S’ha exportat el llistat en CSV (${students.length} alumnes).`;
+        }
+    }
+
+    #activeStudents() {
+        return this.activeCategory === StudentListView.ALL_CATEGORY
+            ? this.students
+            : this.students.filter((student) => student.category === this.activeCategory);
     }
 
     #mountSummary() {
@@ -263,6 +291,8 @@ export class StudentListView {
             .gedac-student-tools__controls { display: flex; flex-wrap: wrap; gap: 8px; }
             .gedac-student-tools__controls button { padding: 7px 10px; border: 1px solid #666; background: #fff; cursor: pointer; }
             .gedac-student-tools__controls button[aria-pressed="true"] { color: #fff; background: #343434; }
+            .gedac-student-tools__controls button:disabled { cursor: not-allowed; opacity: 0.55; }
+            .gedac-student-tools__controls .gedac-student-tools__export { margin-left: auto; border-color: #356b3f; color: #24532e; font-weight: bold; }
             .gedac-student-tools__status { margin: 10px 0; }
             .gedac-student-tools__results { overflow-x: auto; }
             .gedac-student-tools__table { width: 100%; border-collapse: collapse; background: #fff; }

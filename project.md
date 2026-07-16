@@ -26,8 +26,9 @@
 
 ## Validació final
 
-- 8 suites i 37 tests superats amb `pnpm test`.
+- 9 suites i 43 tests superats amb `pnpm test`.
 - Build generat correctament amb `pnpm run build`.
 - Els dos HTML reals de `context/` aporten 15 files cadascun i totes es classifiquen.
 - La configuració real de paginació es detecta amb el report esperat i blocs de 15 files.
 - Cada fitxer funcional de `src/` exporta una sola classe; `src/main.js` es limita a injectar les dependències i inicialitzar el controlador.
+- El llistat complet o la categoria activa es poden exportar a CSV compatible amb Excel.

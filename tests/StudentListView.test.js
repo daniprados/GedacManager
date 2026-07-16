@@ -5,13 +5,15 @@ import { StudentListView } from '../src/StudentListView.js';
 
 describe('StudentListView', () => {
     let logger;
+    let csvExporter;
     let view;
 
     beforeEach(() => {
         document.head.innerHTML = '';
         document.body.innerHTML = reportHtml();
         logger = { debug: jest.fn(), error: jest.fn() };
-        view = new StudentListView(logger, document, StudentClassifier.CATEGORIES);
+        csvExporter = { download: jest.fn(() => true) };
+        view = new StudentListView(logger, document, StudentClassifier.CATEGORIES, csvExporter);
     });
 
     test('afegeix cinc botons abans del report original', () => {
@@ -20,7 +22,8 @@ describe('StudentListView', () => {
         const tools = document.querySelector('#gedac-student-tools');
         const report = document.querySelector('#report_123_catch');
         expect(tools.nextElementSibling).toBe(report);
-        expect(tools.querySelectorAll('button')).toHaveLength(5);
+        expect(tools.querySelectorAll('button[data-category]')).toHaveLength(5);
+        expect(tools.querySelector('button[data-action="export-csv"]')).not.toBeNull();
         expect(tools.querySelector('button[data-category="all"]').getAttribute('aria-pressed')).toBe('true');
     });
 
@@ -73,6 +76,43 @@ describe('StudentListView', () => {
         expect(document.querySelector('#report_123_catch').hidden).toBe(false);
         expect(document.querySelector('.gedac-student-tools__results').hidden).toBe(true);
         expect(document.querySelector('button[data-category="all"]').textContent).toBe('Tots (1)');
+    });
+
+    test('exporta tots els alumnes quan està activa la vista Tots', () => {
+        view.mount();
+        const students = [
+            student('PRE-1', 'Alumne primer', StudentClassifier.CATEGORIES.NOT_CONFIRMED),
+            student('PRE-2', 'Alumne segon', StudentClassifier.CATEGORIES.IMPROVEMENT),
+        ];
+        view.onStudents(students);
+
+        document.querySelector('button[data-action="export-csv"]').click();
+
+        expect(csvExporter.download).toHaveBeenCalledWith(students, 'all');
+        expect(document.querySelector('[role="status"]').textContent)
+            .toBe('S’ha exportat el llistat en CSV (2 alumnes).');
+    });
+
+    test('exporta només la categoria activa i es desactiva si és buida', () => {
+        view.mount();
+        const improvementStudent = student(
+            'PRE-2',
+            'Alumne segon',
+            StudentClassifier.CATEGORIES.IMPROVEMENT,
+        );
+        view.onStudents([
+            student('PRE-1', 'Alumne primer', StudentClassifier.CATEGORIES.NOT_CONFIRMED),
+            improvementStudent,
+        ]);
+        document.querySelector('button[data-category="improvement"]').click();
+
+        const exportButton = document.querySelector('button[data-action="export-csv"]');
+        expect(exportButton.disabled).toBe(false);
+        exportButton.click();
+        expect(csvExporter.download).toHaveBeenCalledWith([improvementStudent], 'improvement');
+
+        document.querySelector('button[data-category="confirmedEnrolled"]').click();
+        expect(exportButton.disabled).toBe(true);
     });
 
     test('mostra un estat buit quan una categoria no té alumnes', () => {
