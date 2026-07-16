@@ -22,4 +22,12 @@
 5. **Completat** — Coordinar la càrrega, eliminar duplicats i reaccionar a cerques o refrescos nous.
 6. **Completat** — Crear la vista de consulta amb els cinc botons, estats de càrrega i taula accessible.
 7. **Completat** — Afegir el resum al peu amb els quatre recomptes i completar els tests DOM d'integració.
-8. **Pendent** — Executar tota la suite, generar el build i revisar que no hi hagi regressions ni canvis fora d'abast.
+8. **Completat** — Executar tota la suite, generar el build i revisar que no hi hagi regressions ni canvis fora d'abast.
+
+## Validació final
+
+- 8 suites i 37 tests superats amb `pnpm test`.
+- Build generat correctament amb `pnpm run build`.
+- Els dos HTML reals de `context/` aporten 15 files cadascun i totes es classifiquen.
+- La configuració real de paginació es detecta amb el report esperat i blocs de 15 files.
+- Cada fitxer funcional de `src/` exporta una sola classe; `src/main.js` es limita a injectar les dependències i inicialitzar el controlador.

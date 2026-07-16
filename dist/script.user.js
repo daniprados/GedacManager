@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gedac manageer
 // @namespace    
-// @version      0.0.0.1
+// @version      0.0.0.2
 // @description  Millores per a la plataforma Gedac
 // @author       daniprados
 // @license      MIT
