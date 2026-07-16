@@ -21,5 +21,5 @@
 4. **Completat** — Implementar el client de paginació APEX per obtenir totes les pàgines sense alterar la taula visible.
 5. **Completat** — Coordinar la càrrega, eliminar duplicats i reaccionar a cerques o refrescos nous.
 6. **Completat** — Crear la vista de consulta amb els cinc botons, estats de càrrega i taula accessible.
-7. **Pendent** — Afegir el resum al peu amb els quatre recomptes i completar els tests DOM d'integració.
+7. **Completat** — Afegir el resum al peu amb els quatre recomptes i completar els tests DOM d'integració.
 8. **Pendent** — Executar tota la suite, generar el build i revisar que no hi hagi regressions ni canvis fora d'abast.

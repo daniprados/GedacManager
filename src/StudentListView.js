@@ -12,6 +12,8 @@ export class StudentListView {
         this.status = null;
         this.resultTable = null;
         this.resultBody = null;
+        this.summary = null;
+        this.summaryCounts = new Map();
         this.buttons = new Map();
     }
 
@@ -38,6 +40,7 @@ export class StudentListView {
         this.container.setAttribute('aria-label', 'Consulta dels estats de matrícula');
         this.container.append(this.#createControls(), this.#createStatus(), this.#createResultTable());
         this.originalReport.parentNode.insertBefore(this.container, this.originalReport);
+        this.#mountSummary();
 
         return true;
     }
@@ -48,21 +51,25 @@ export class StudentListView {
         if (this.status) {
             this.status.textContent = 'Carregant tots els alumnes de la cerca…';
             this.status.dataset.state = 'loading';
+            this.summary?.setAttribute('aria-busy', 'true');
         }
     }
 
     onStudents(students) {
         this.students = students;
         this.#updateButtons();
+        this.#updateSummary();
         this.#showCategory(this.activeCategory);
         this.status.textContent = `${students.length} alumnes carregats.`;
         this.status.dataset.state = 'ready';
+        this.summary.setAttribute('aria-busy', 'false');
     }
 
     onError(error) {
         this.logger.error('Error mostrat a les eines de consulta', error);
         this.status.textContent = 'No s’ha pogut carregar el llistat complet. Pots continuar utilitzant la taula original.';
         this.status.dataset.state = 'error';
+        this.summary?.setAttribute('aria-busy', 'false');
         this.#showCategory(StudentListView.ALL_CATEGORY);
     }
 
@@ -181,6 +188,48 @@ export class StudentListView {
         }
     }
 
+    #mountSummary() {
+        this.summary = this.document.createElement('section');
+        this.summary.id = 'gedac-student-summary';
+        this.summary.setAttribute('aria-label', 'Resum dels estats de matrícula');
+        this.summary.setAttribute('aria-busy', 'true');
+        const heading = this.document.createElement('h5');
+        heading.textContent = 'Resum dels alumnes de la cerca';
+        const list = this.document.createElement('dl');
+        list.className = 'gedac-student-summary__list';
+
+        for (const definition of this.#buttonDefinitions().filter(
+            ({ category }) => category !== StudentListView.ALL_CATEGORY,
+        )) {
+            const item = this.document.createElement('div');
+            const term = this.document.createElement('dt');
+            const count = this.document.createElement('dd');
+            term.textContent = definition.label;
+            count.textContent = '0';
+            count.dataset.category = definition.category;
+            this.summaryCounts.set(definition.category, count);
+            item.append(term, count);
+            list.append(item);
+        }
+
+        this.summary.append(heading, list);
+        const footer = this.document.querySelector('table.peu');
+
+        if (footer) {
+            footer.parentNode.insertBefore(this.summary, footer);
+        } else {
+            this.document.body.append(this.summary);
+        }
+    }
+
+    #updateSummary() {
+        for (const [category, element] of this.summaryCounts) {
+            element.textContent = String(
+                this.students.filter((student) => student.category === category).length,
+            );
+        }
+    }
+
     #buttonDefinitions() {
         return [
             { category: StudentListView.ALL_CATEGORY, label: 'Tots' },
@@ -220,6 +269,12 @@ export class StudentListView {
             .gedac-student-tools__table th, .gedac-student-tools__table td { padding: 6px; border: 1px solid #ccc; text-align: left; }
             .gedac-student-tools__table th { background: #666; color: #fff; }
             .gedac-student-tools__table tbody tr:nth-child(even) { background: #f3f3f3; }
+            #gedac-student-summary { margin: 16px 10%; padding: 12px; border-top: 3px solid #666; background: #f3f3f3; }
+            #gedac-student-summary h5 { margin: 0 0 10px; font-size: 1rem; }
+            .gedac-student-summary__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 0; }
+            .gedac-student-summary__list div { padding: 8px; background: #fff; border: 1px solid #ccc; }
+            .gedac-student-summary__list dt { font-weight: bold; }
+            .gedac-student-summary__list dd { margin: 4px 0 0; font-size: 1.3rem; }
         `;
         this.document.head.append(style);
     }

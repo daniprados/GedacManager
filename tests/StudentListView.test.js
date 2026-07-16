@@ -24,6 +24,26 @@ describe('StudentListView', () => {
         expect(tools.querySelector('button[data-category="all"]').getAttribute('aria-pressed')).toBe('true');
     });
 
+    test('afegeix el resum abans del peu i n’actualitza els quatre recomptes', () => {
+        document.body.insertAdjacentHTML('beforeend', '<table class="peu"><tr><td>Peu</td></tr></table>');
+        view.mount();
+
+        view.onStudents([
+            student('PRE-1', 'A', StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED),
+            student('PRE-2', 'B', StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED),
+            student('PRE-3', 'C', StudentClassifier.CATEGORIES.NOT_CONFIRMED),
+            student('PRE-4', 'D', StudentClassifier.CATEGORIES.IMPROVEMENT),
+        ]);
+
+        const summary = document.querySelector('#gedac-student-summary');
+        expect(summary.nextElementSibling).toBe(document.querySelector('table.peu'));
+        expect(summary.getAttribute('aria-busy')).toBe('false');
+        expect(summary.querySelector('[data-category="confirmedEnrolled"]').textContent).toBe('2');
+        expect(summary.querySelector('[data-category="confirmedNotEnrolled"]').textContent).toBe('0');
+        expect(summary.querySelector('[data-category="notConfirmed"]').textContent).toBe('1');
+        expect(summary.querySelector('[data-category="improvement"]').textContent).toBe('1');
+    });
+
     test('mostra tots els alumnes de la categoria escollida en una taula de consulta', () => {
         view.mount();
         view.onStudents([
