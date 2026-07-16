@@ -1,7 +1,9 @@
 export class GedacController {
-    constructor(logger, pageDetector) {
+    constructor(logger, pageDetector, studentListView, studentListCoordinator) {
         this.logger = logger;
         this.pageDetector = pageDetector;
+        this.studentListView = studentListView;
+        this.studentListCoordinator = studentListCoordinator;
     }
 
     /**
@@ -16,6 +18,9 @@ export class GedacController {
         }
 
         this.logger.info('Inicialització de les eines de matrícula CFP');
+        if (this.studentListView.mount()) {
+            void this.studentListCoordinator.start(document);
+        }
 
         return true;
     }
