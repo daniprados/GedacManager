@@ -18,7 +18,7 @@
 1. **Completat** — Preparar l'esquelet del projecte, activar l'script a la URL APEX i detectar de manera segura la pàgina objectiu, amb tests.
 2. **Completat** — Modelar i provar l'extracció de files del report APEX sense dependre de textos traduïts.
 3. **Completat** — Implementar i provar la classificació excloent dels alumnes segons els codis d'estat i documentació.
-4. **Pendent** — Implementar el client de paginació APEX per obtenir totes les pàgines sense alterar la taula visible.
+4. **Completat** — Implementar el client de paginació APEX per obtenir totes les pàgines sense alterar la taula visible.
 5. **Pendent** — Coordinar la càrrega, eliminar duplicats i reaccionar a cerques o refrescos nous.
 6. **Pendent** — Crear la vista de consulta amb els cinc botons, estats de càrrega i taula accessible.
 7. **Pendent** — Afegir el resum al peu amb els quatre recomptes i completar els tests DOM d'integració.
