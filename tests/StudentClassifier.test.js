@@ -11,7 +11,7 @@ describe('StudentClassifier', () => {
         classifier = new StudentClassifier(logger);
     });
 
-    test.each(['C', 'CC'])('classifica %s amb documentació S com a matriculat', (confirmationCode) => {
+    test.each(['C', 'CC', 'CPM'])('classifica %s amb documentació S com a matriculat', (confirmationCode) => {
         expect(classifier.classify(student(confirmationCode, 'S'))).toBe(
             StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED,
         );
@@ -22,6 +22,8 @@ describe('StudentClassifier', () => {
         ['C', ''],
         ['CC', 'N'],
         ['CC', ''],
+        ['CPM', 'N'],
+        ['CPM', ''],
     ])('classifica %s amb documentació %s com a confirmat no matriculat', (confirmationCode, documentationCode) => {
         expect(classifier.classify(student(confirmationCode, documentationCode))).toBe(
             StudentClassifier.CATEGORIES.CONFIRMED_NOT_ENROLLED,
@@ -34,7 +36,7 @@ describe('StudentClassifier', () => {
         );
     });
 
-    test.each(['M', 'MC', 'CPM'])('classifica %s com a millora independentment de la documentació', (confirmationCode) => {
+    test.each(['M', 'MC'])('classifica %s com a millora independentment de la documentació', (confirmationCode) => {
         expect(classifier.classify(student(confirmationCode, 'S'))).toBe(
             StudentClassifier.CATEGORIES.IMPROVEMENT,
         );

@@ -17,7 +17,7 @@ export class StudentClassifier {
      * @returns {string|null}
      */
     classify(student) {
-        if (['M', 'MC', 'CPM'].includes(student.confirmationCode)) {
+        if (['M', 'MC'].includes(student.confirmationCode)) {
             return StudentClassifier.CATEGORIES.IMPROVEMENT;
         }
 
@@ -25,7 +25,7 @@ export class StudentClassifier {
             return StudentClassifier.CATEGORIES.NOT_CONFIRMED;
         }
 
-        if (['C', 'CC'].includes(student.confirmationCode)) {
+        if (['C', 'CC', 'CPM'].includes(student.confirmationCode)) {
             if (student.documentationCode === 'S') {
                 return StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED;
             }
