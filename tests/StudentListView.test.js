@@ -16,13 +16,13 @@ describe('StudentListView', () => {
         view = new StudentListView(logger, document, StudentClassifier.CATEGORIES, csvExporter);
     });
 
-    test('afegeix cinc botons abans del report original', () => {
+    test('afegeix sis botons abans del report original', () => {
         expect(view.mount()).toBe(true);
 
         const tools = document.querySelector('#gedac-student-tools');
         const report = document.querySelector('#report_123_catch');
         expect(tools.nextElementSibling).toBe(report);
-        expect(tools.querySelectorAll('button[data-category]')).toHaveLength(5);
+        expect(tools.querySelectorAll('button[data-category]')).toHaveLength(6);
         expect(tools.querySelector('button[data-action="export-csv"]')).not.toBeNull();
         expect(tools.querySelector('button[data-category="all"]').getAttribute('aria-pressed')).toBe('true');
     });
@@ -34,8 +34,9 @@ describe('StudentListView', () => {
         view.onStudents([
             student('PRE-1', 'A', StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED),
             student('PRE-2', 'B', StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED),
-            student('PRE-3', 'C', StudentClassifier.CATEGORIES.NOT_CONFIRMED),
-            student('PRE-4', 'D', StudentClassifier.CATEGORIES.IMPROVEMENT),
+            student('PRE-3', 'C', StudentClassifier.CATEGORIES.CONFIRMED_BY_IMPROVEMENT),
+            student('PRE-4', 'D', StudentClassifier.CATEGORIES.NOT_CONFIRMED),
+            student('PRE-5', 'E', StudentClassifier.CATEGORIES.IMPROVEMENT),
         ]);
 
         const summary = document.querySelector('#gedac-student-summary');
@@ -43,6 +44,7 @@ describe('StudentListView', () => {
         expect(summary.getAttribute('aria-busy')).toBe('false');
         expect(summary.querySelector('[data-category="confirmedEnrolled"]').textContent).toBe('2');
         expect(summary.querySelector('[data-category="confirmedNotEnrolled"]').textContent).toBe('0');
+        expect(summary.querySelector('[data-category="confirmedByImprovement"]').textContent).toBe('1');
         expect(summary.querySelector('[data-category="notConfirmed"]').textContent).toBe('1');
         expect(summary.querySelector('[data-category="improvement"]').textContent).toBe('1');
     });
