@@ -263,6 +263,7 @@ export class StudentListView {
             { category: StudentListView.ALL_CATEGORY, label: 'Tots' },
             { category: this.categories.CONFIRMED_ENROLLED, label: 'Confirmats i matriculats' },
             { category: this.categories.CONFIRMED_NOT_ENROLLED, label: 'Confirmats i no matriculats' },
+            { category: this.categories.CONFIRMED_BY_IMPROVEMENT, label: 'Confirmats per millora' },
             { category: this.categories.NOT_CONFIRMED, label: 'No confirmats' },
             { category: this.categories.IMPROVEMENT, label: 'Millora' },
         ];
