@@ -17,7 +17,7 @@ export class StudentClassifier {
      * @returns {string|null}
      */
     classify(student) {
-        if (['M', 'MC'].includes(student.confirmationCode)) {
+        if (['M', 'MC', 'CPM'].includes(student.confirmationCode)) {
             return StudentClassifier.CATEGORIES.IMPROVEMENT;
         }
 

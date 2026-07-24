@@ -90,6 +90,7 @@ export class StudentCsvExporter {
             CC: 'Confirmació plaça (centre)',
             M: 'Intent de millora de l’alumne/a',
             MC: 'Intentar millorar (centre)',
+            CPM: 'Confirmat per millora',
             R: 'Renunciat per l’alumne/a',
             '': 'No confirmat',
         }[code] ?? code;

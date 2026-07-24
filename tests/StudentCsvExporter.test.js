@@ -34,6 +34,15 @@ describe('StudentCsvExporter', () => {
         expect(csv.split('\r\n')).toHaveLength(3);
     });
 
+    test('mostra l’estat Confirmat per millora a l’exportació', () => {
+        const csv = exporter.serialize([{
+            ...student(),
+            confirmationCode: 'CPM',
+        }]);
+
+        expect(csv).toContain('"Confirmat per millora";"Sí"');
+    });
+
     test('escapa cometes, salts de línia i possibles fórmules de full de càlcul', () => {
         const unsafeStudent = {
             ...student(),

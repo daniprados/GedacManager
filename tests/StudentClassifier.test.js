@@ -34,23 +34,9 @@ describe('StudentClassifier', () => {
         );
     });
 
-    test.each(['M', 'MC'])('classifica %s com a millora independentment de la documentació', (confirmationCode) => {
+    test.each(['M', 'MC', 'CPM'])('classifica %s com a millora independentment de la documentació', (confirmationCode) => {
         expect(classifier.classify(student(confirmationCode, 'S'))).toBe(
             StudentClassifier.CATEGORIES.IMPROVEMENT,
-        );
-    });
-
-    test('deixa CPM sense classificar perquè queda fora del flux acordat', () => {
-        const unclassifiedStudent = student('CPM', 'S');
-
-        expect(classifier.classify(unclassifiedStudent)).toBeNull();
-        expect(logger.warn).toHaveBeenCalledWith(
-            'No s’ha pogut classificar un alumne del report de matrícula',
-            {
-                applicationCode: 'PRE26-1',
-                confirmationCode: 'CPM',
-                documentationCode: 'S',
-            },
         );
     });
 
