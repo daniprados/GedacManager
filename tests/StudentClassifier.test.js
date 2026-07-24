@@ -28,9 +28,15 @@ describe('StudentClassifier', () => {
         );
     });
 
-    test.each(['S', 'N', ''])('classifica CPM amb documentació %s com a confirmat per millora', (documentationCode) => {
+    test('classifica CPM amb documentació S com a confirmat i matriculat', () => {
+        expect(classifier.classify(student('CPM', 'S'))).toBe(
+            StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED,
+        );
+    });
+
+    test.each(['N', ''])('classifica CPM amb documentació %s com a confirmat no matriculat', (documentationCode) => {
         expect(classifier.classify(student('CPM', documentationCode))).toBe(
-            StudentClassifier.CATEGORIES.CONFIRMED_BY_IMPROVEMENT,
+            StudentClassifier.CATEGORIES.CONFIRMED_NOT_ENROLLED,
         );
     });
 

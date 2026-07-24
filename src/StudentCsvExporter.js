@@ -109,7 +109,6 @@ export class StudentCsvExporter {
             all: 'tots',
             confirmedEnrolled: 'confirmats-matriculats',
             confirmedNotEnrolled: 'confirmats-no-matriculats',
-            confirmedByImprovement: 'confirmats-per-millora',
             notConfirmed: 'no-confirmats',
             improvement: 'millora',
         };

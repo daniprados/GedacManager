@@ -2,7 +2,6 @@ export class StudentClassifier {
     static CATEGORIES = Object.freeze({
         CONFIRMED_ENROLLED: 'confirmedEnrolled',
         CONFIRMED_NOT_ENROLLED: 'confirmedNotEnrolled',
-        CONFIRMED_BY_IMPROVEMENT: 'confirmedByImprovement',
         NOT_CONFIRMED: 'notConfirmed',
         IMPROVEMENT: 'improvement',
     });
@@ -18,10 +17,6 @@ export class StudentClassifier {
      * @returns {string|null}
      */
     classify(student) {
-        if (student.confirmationCode === 'CPM') {
-            return StudentClassifier.CATEGORIES.CONFIRMED_BY_IMPROVEMENT;
-        }
-
         if (['M', 'MC'].includes(student.confirmationCode)) {
             return StudentClassifier.CATEGORIES.IMPROVEMENT;
         }
@@ -30,7 +25,7 @@ export class StudentClassifier {
             return StudentClassifier.CATEGORIES.NOT_CONFIRMED;
         }
 
-        if (['C', 'CC'].includes(student.confirmationCode)) {
+        if (['C', 'CC', 'CPM'].includes(student.confirmationCode)) {
             if (student.documentationCode === 'S') {
                 return StudentClassifier.CATEGORIES.CONFIRMED_ENROLLED;
             }
